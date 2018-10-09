@@ -1,0 +1,16 @@
+/*Taustav‰rvi ja fondi m‰‰ramine */
+.root{ 
+	-fx-background-color:#c7d5e0;
+	-fx-font-size: 20pt;
+	-fx-font-family: "Roboto";
+}
+/*ComboBoxi "v" nupu v‰rv */
+.combo-box{
+	-fx-pref-width:155px;
+	-fx-background-color: #2a475e;
+}
+/*Comboboxi drop-down v‰rv */
+.combo-box .list-cell{
+	-fx-background-color:#2a475e;
+	-fx-text-fill: #c7d5e0;
+}
