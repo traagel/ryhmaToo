@@ -3,7 +3,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
- 
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -16,22 +15,16 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
  
- 
 public class Main extends Application {
     Stage window;
  
-    
-    
     //loob uue GridPane layouti kuhu elemente paigutada, rakendub mainis alles hiljem
     public GridPane looGrid(Label tekstA1, ComboBox tunnidA, ComboBox minutidA, Label tekst1, Label tyhiLabel, Label tekstA2, ComboBox tunnidB, ComboBox minutidB, Label tekst2, Label tyhiLabel2, Label tekstA3, Label tekst3 ) {
-  
-    	
     	//uus grid
     	GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10)); //padding ‰‰rtest < ^ v Insets
         grid.setVgap(8); //vertikaalne vahe gridis
         grid.setHgap(10); //horisontaalne vahe gridis
-        
         
         //paigutab elemendid gridi
         GridPane.setConstraints(tekstA1, 0, 0, 2 ,1);
@@ -57,8 +50,6 @@ public class Main extends Application {
         return grid;
     }
     
-    
-  
     public String lisaAeg(String aeg, int tsyklid, boolean liida) { //liidab/lahutab stringis antud HH:mm ajast ette antud arvu ts¸kleid (int tsyklid)
     	DateTimeFormatter ajaKuju = DateTimeFormatter.ofPattern("HH:mm");
     	LocalTime ltAeg = LocalTime.parse(aeg, ajaKuju);
@@ -90,8 +81,6 @@ public class Main extends Application {
         Label tekst2 = new Label("Mine magama kell 23:30");
         Label tekst3 = new Label("ƒrka ¸les kell " + praegusele(5));
         
-        
-
        //kolme punkti CSS
         tyhiLabel.setStyle("-fx-font-size:30pt; -fx-font-weight: bold;");
         tyhiLabel2.setStyle("-fx-font-size:30pt; -fx-font-weight: bold;");
@@ -111,8 +100,6 @@ public class Main extends Application {
         tunnidB.setVisibleRowCount(m);
         minutidB.setVisibleRowCount(m);
 
-       
-       
         //tunni dropdown men¸¸
         for (int i = 0; i<=60; i++) {
             if (i<10) {
@@ -124,7 +111,6 @@ public class Main extends Application {
                 minutidA.getItems().add(Integer.toString(i));
             }
         }
-        
         
         //tekitab eelnevalt defineeritud gridi
         GridPane grid = looGrid(tekstA1, tunnidA, minutidA, tekst1, tyhiLabel, tekstA2, tunnidB, minutidB, tekst2, tyhiLabel2, tekstA3, tekst3);
@@ -155,9 +141,6 @@ public class Main extends Application {
         window.setScene(scene); //loo stseen
         window.setResizable(false); //ei saa akna suurust muuta
         window.show(); //n‰ita akent
-       
-       
- 
     }
  
     public static void main(String[] args) {
