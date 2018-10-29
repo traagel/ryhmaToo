@@ -130,7 +130,6 @@ public class Main extends Application {
         tunnidB.getSelectionModel().select(06);
         minutidB.getSelectionModel().select(45);
  
-
         //lambda funktsioonid - kui muudetakse drop down menüü väärtust muudab tekste
         tunnidA.setOnAction(e -> tekst1.setText("Ärka üles kell " + lisaAeg((String) tunnidA.getValue() + ":" + (String)minutidA.getValue(),5,true)));
         minutidA.setOnAction(e -> tekst1.setText("Ärka üles kell " + lisaAeg((String) tunnidA.getValue() + ":" + (String)minutidA.getValue(),5,true)));
