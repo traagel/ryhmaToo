@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -5,7 +6,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
-import static javax.swing.JOptionPane.showInternalMessageDialog;
 
 public class Unepaevik {
     private String magamaMinekuAeg;
@@ -64,9 +64,9 @@ public class Unepaevik {
     public void soovita() {
         //võrdleb uneaega kasutaja poolt määratud piisava uneajaga ning annab vastava soovituse
         if (magamisAeg() > piisavUneAeg * 60) {
-            showInternalMessageDialog(null, "Tubli! Magasid hasti.");
+            JOptionPane.showMessageDialog(null, "Tubli! Magasid hasti.");
         } else {
-            showInternalMessageDialog(null, "Magasid liiga vahe!");
+            JOptionPane.showMessageDialog(null, "Magasid liiga vahe!");
         }
     }
 }
