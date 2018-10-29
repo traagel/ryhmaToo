@@ -8,11 +8,11 @@ import java.util.regex.Pattern;
 
 public class UnepäevikKäivitus {
 	private static Matcher m;
-	
+
 	public static void algAndmed() throws IOException {
 		küsiAndmeid(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")), LocalTime.now().plusHours(8).format(DateTimeFormatter.ofPattern("HH:mm")), "0 minutit", "0 minutit");
 	}
-	public static void küsiAndmeid(String alg1, String alg2, String alg3, String alg4) throws IOException { 
+	public static void küsiAndmeid(String algväärtus1, String algväärtus2, String algväärtus3, String algväärtus4) throws IOException { 
 		//väljad
 		JTextField väli1 = new JTextField();
 		JTextField väli2 = new JTextField();
@@ -20,10 +20,10 @@ public class UnepäevikKäivitus {
 		JTextField väli4 = new JTextField();
 
 		// mida kasutaja võiks sisestada
-		väli1.setText(alg1);
-		väli2.setText(alg2);
-		väli3.setText(alg3);
-		väli4.setText(alg4);
+		väli1.setText(algväärtus1); // mis kell magama
+		väli2.setText(algväärtus2); // mis kell ärkan
+		väli3.setText(algväärtus3); // palju kulub aega magama jäämiseks
+		väli4.setText(algväärtus4); // kaua on ärkvel
 
 		Object[] väljad = {
 				"magama mineku aeg", väli1, 
@@ -31,14 +31,14 @@ public class UnepäevikKäivitus {
 				"aeg mis kulub magama minekuks", väli3, 
 				"öösel ärkvel olemise aeg", väli4};
 
-		int nupp = JOptionPane.showConfirmDialog(null, väljad,"Andmete sisestamine", JOptionPane.OK_CANCEL_OPTION);
-		
+		int nupuvajutus = JOptionPane.showConfirmDialog(null, väljad,"Andmete sisestamine", JOptionPane.OK_CANCEL_OPTION);
+
 		//kas andmed korrektsed
-		if(nupp == 0 && (väli1.getText().equals("") || väli2.getText().equals("") || väli3.getText().equals("") || väli4.getText().equals(""))) { 
-			JOptionPane.showMessageDialog(null, "sisestasid midagi valesti");
-			küsiAndmeid(väli1.getText(), väli2.getText(), väli3.getText(), väli4.getText());
-		}else if(nupp == 0){
-			vajalikudAndmed(väli1.getText(), väli2.getText(), väli3.getText(), väli4.getText());
+		if(nupuvajutus == 0 && (väli1.getText().equals("") || väli2.getText().equals("") || väli3.getText().equals("") || väli4.getText().equals(""))) { // väli jäi tühjaks
+			JOptionPane.showMessageDialog(null, "midagi jäi siestamata");
+			küsiAndmeid(väli1.getText(), väli2.getText(), väli3.getText(), väli4.getText()); // küsib andmete parandust
+		}else if(nupuvajutus == 0){
+			vajalikudAndmed(väli1.getText(), väli2.getText(), väli3.getText(), väli4.getText()); // edastab andmed
 		}
 	}
 
