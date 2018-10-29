@@ -21,7 +21,15 @@ import javafx.scene.paint.Color;
  
 public class Main extends Application {
     Stage window;
- 
+    int tsyklid = 5;
+    
+    public void setTsyklid(int tsyklid) {
+    	this.tsyklid = tsyklid;
+    }
+    
+    public int getTsyklid() {
+    	return tsyklid;
+    }
         
     //loob uue GridPane layouti kuhu elemente paigutada, rakendub mainis alles hiljem
     public GridPane looGrid(Label tekstA1, ComboBox tunnidA, ComboBox minutidA, Label tekst1, Label tyhiLabel, Label tekstA2, ComboBox tunnidB, ComboBox minutidB, Label tekst2, Label tyhiLabel2, Label tekstA3, Label tekst3 ) {
@@ -58,7 +66,29 @@ public class Main extends Application {
     }
     
 
+    //unepäeviku Hboxi loomine
+    public HBox unepäevik() {
+    	
+        HBox hbox = new HBox(10);
+        hbox.setAlignment(Pos.BASELINE_CENTER);
+        Button käivita = new Button("Unepäevik");
+        hbox.setPadding(new Insets(10, 10, 10, 10));
+        
+        
+        //trycatch lambda fn
+        käivita.setOnAction( e->{
+			try {
+				UnepäevikKäivitus.main(null);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		});
+        
+        hbox.getChildren().add(käivita);
+        return hbox;
+    }
     
+   
   
     public String lisaAeg(String aeg, int tsyklid, boolean liida) { //liidab/lahutab stringis antud HH:mm ajast ette antud arvu tsükleid (int tsyklid)
     	DateTimeFormatter ajaKuju = DateTimeFormatter.ofPattern("HH:mm");
@@ -79,6 +109,9 @@ public class Main extends Application {
         window = primaryStage; //aken
         window.setTitle("uneMati"); //pealkiri
         
+    
+        
+        
         //kasutusel olevad tekstid
         Label tekstA1 = new Label("Lähen magama kell"); 
         Label tekstA2 = new Label("Ärkan üles kell");
@@ -89,7 +122,7 @@ public class Main extends Application {
         //väljundi default väärtused
         Label tekst1 = new Label("Ärka üles kell 6:30");
         Label tekst2 = new Label("Mine magama kell 23:30");
-        Label tekst3 = new Label("Ärka üles kell " + praegusele(5));
+        Label tekst3 = new Label("Ärka üles kell " + praegusele(getTsyklid()));
         
         
 
@@ -127,11 +160,6 @@ public class Main extends Application {
         }
         
         
-        
-        
-        
-       
-        
         //tekitab eelnevalt defineeritud gridi
         GridPane grid = looGrid(tekstA1, tunnidA, minutidA, tekst1, tyhiLabel, tekstA2, tunnidB, minutidB, tekst2, tyhiLabel2, tekstA3, tekst3);
         
@@ -148,35 +176,83 @@ public class Main extends Application {
  
 
         //lambda funktsioonid - kui muudetakse drop down menüü väärtust muudab tekste
-        tunnidA.setOnAction(e -> tekst1.setText("Ärka üles kell " + lisaAeg((String) tunnidA.getValue() + ":" + (String)minutidA.getValue(),5,true)));
-        minutidA.setOnAction(e -> tekst1.setText("Ärka üles kell " + lisaAeg((String) tunnidA.getValue() + ":" + (String)minutidA.getValue(),5,true)));
-        tunnidB.setOnAction(e -> tekst2.setText ("Mine magama kell " + lisaAeg((String) tunnidB.getValue() + ":" + (String)minutidB.getValue(),5,false)));
-        minutidB.setOnAction(e -> tekst2.setText("Mine magama kell " + lisaAeg((String) tunnidB.getValue() + ":" + (String)minutidB.getValue(),5,false)));
-        
-        
+        tunnidA.setOnAction(e -> tekst1.setText("Ärka üles kell " + lisaAeg((String) tunnidA.getValue() + ":" + (String)minutidA.getValue(),getTsyklid(),true)));
+        minutidA.setOnAction(e -> tekst1.setText("Ärka üles kell " + lisaAeg((String) tunnidA.getValue() + ":" + (String)minutidA.getValue(),getTsyklid(),true)));
+        tunnidB.setOnAction(e -> tekst2.setText ("Mine magama kell " + lisaAeg((String) tunnidB.getValue() + ":" + (String)minutidB.getValue(),getTsyklid(),false)));
+        minutidB.setOnAction(e -> tekst2.setText("Mine magama kell " + lisaAeg((String) tunnidB.getValue() + ":" + (String)minutidB.getValue(),getTsyklid(),false)));
         
         
         //loob BorderPane ja paigutab sinna HBoxi sisse, unepäeviku lingi jaoks
         BorderPane border = new BorderPane();
         
         //uus hbox - üles, unepäeviku avamiseks
-        HBox hbox = new HBox(10);
-        hbox.setAlignment(Pos.BASELINE_CENTER);
-        Button käivita = new Button("Unepäevik");
-        hbox.setPadding(new Insets(10, 10, 10, 10));
+        HBox hbox = unepäevik();
+        //Unepäeviku Hboxi lõpp
         
-        //trycatch lambda fn
-        käivita.setOnAction( e->{
-			try {
-				UnepäevikKäivitus.main(null);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-		});
+        //Tsüklite arvu valiku HBox
         
-        hbox.getChildren().add(käivita);
+
+        
+        HBox hbox2 = new HBox(10);
+        hbox2.setPadding(new Insets(10, 10, 10, 10));
+        Label label = new Label("Unetsüklite arv:");
+        
+
+        
+        Button bt1 = new Button("4");
+        Button bt2 = new Button("5");
+        Button bt3 = new Button("6");
+        
+        
+        
+        bt1.setOnAction(e -> {
+        	bt1.setStyle("-fx-text-fill:#66c0f4");
+        	bt2.setStyle(null);
+        	bt3.setStyle(null);
+        	setTsyklid(4);
+            tekst1.setText("Ärka üles kell " + lisaAeg((String) tunnidA.getValue() + ":" + (String)minutidA.getValue(),getTsyklid(),true));
+            tekst1.setText("Ärka üles kell " + lisaAeg((String) tunnidA.getValue() + ":" + (String)minutidA.getValue(),getTsyklid(),true));
+            tekst2.setText ("Mine magama kell " + lisaAeg((String) tunnidB.getValue() + ":" + (String)minutidB.getValue(),getTsyklid(),false));
+            tekst2.setText("Mine magama kell " + lisaAeg((String) tunnidB.getValue() + ":" + (String)minutidB.getValue(),getTsyklid(),false));
+            tekst3.setText("Ärka üles kell " + praegusele(getTsyklid()));
+        	
+        });
+        bt2.setOnAction(e -> {
+        	bt2.setStyle("-fx-text-fill:#66c0f4");
+        	bt1.setStyle(null);
+        	bt3.setStyle(null);
+        	setTsyklid(5);
+            tekst1.setText("Ärka üles kell " + lisaAeg((String) tunnidA.getValue() + ":" + (String)minutidA.getValue(),getTsyklid(),true));
+            tekst1.setText("Ärka üles kell " + lisaAeg((String) tunnidA.getValue() + ":" + (String)minutidA.getValue(),getTsyklid(),true));
+            tekst2.setText ("Mine magama kell " + lisaAeg((String) tunnidB.getValue() + ":" + (String)minutidB.getValue(),getTsyklid(),false));
+            tekst2.setText("Mine magama kell " + lisaAeg((String) tunnidB.getValue() + ":" + (String)minutidB.getValue(),getTsyklid(),false));
+            tekst3.setText("Ärka üles kell " + praegusele(getTsyklid()));
+        });
+        bt3.setOnAction(e -> {
+        	bt3.setStyle("-fx-text-fill:#66c0f4");
+        	bt2.setStyle(null);
+        	bt1.setStyle(null);
+        	setTsyklid(6);
+            tekst1.setText("Ärka üles kell " + lisaAeg((String) tunnidA.getValue() + ":" + (String)minutidA.getValue(),getTsyklid(),true));
+            tekst1.setText("Ärka üles kell " + lisaAeg((String) tunnidA.getValue() + ":" + (String)minutidA.getValue(),getTsyklid(),true));
+            tekst2.setText ("Mine magama kell " + lisaAeg((String) tunnidB.getValue() + ":" + (String)minutidB.getValue(),getTsyklid(),false));
+            tekst2.setText("Mine magama kell " + lisaAeg((String) tunnidB.getValue() + ":" + (String)minutidB.getValue(),getTsyklid(),false));
+            tekst3.setText("Ärka üles kell " + praegusele(getTsyklid()));
+        });
+        bt2.setStyle("-fx-text-fill:#66c0f4");
+        hbox2.getChildren().addAll(label, bt1, bt2, bt3);
+        hbox2.setAlignment(Pos.BASELINE_CENTER);
+        
+        
+        
+        
+        
+        
+        
+
         border.setCenter(grid);
         border.setTop(hbox);
+        border.setBottom(hbox2);
 
         
         
