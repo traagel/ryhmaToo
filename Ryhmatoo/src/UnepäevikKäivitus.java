@@ -2,8 +2,8 @@ import javax.swing.*;
 import java.io.IOException;
 import java.time.LocalDate;
 
-public class Test {
-    public static void main(String[] args) throws IOException {
+public class UnepäevikKäivitus {
+    public static void main(String[] args) throws Exception {
         String magamaMinek = JOptionPane.showInputDialog(null, "Sisesta magama mineku aeg ", "Andmete sisestamine", JOptionPane.QUESTION_MESSAGE);
         String arkamine = JOptionPane.showInputDialog(null, "Sisesta arkamise aeg ", "Andmete sisestamine", JOptionPane.QUESTION_MESSAGE);
         int aegMagamaJaamiseks = Integer.parseInt(JOptionPane.showInputDialog(null, "Sisesta aeg, mis kulus magama jaamiseks:  ", "Andmete sisestamine", JOptionPane.QUESTION_MESSAGE));

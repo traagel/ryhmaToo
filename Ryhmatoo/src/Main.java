@@ -13,19 +13,19 @@ import javafx.stage.Stage;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
  
  
 public class Main extends Application {
     Stage window;
  
-    
-    
+        
     //loob uue GridPane layouti kuhu elemente paigutada, rakendub mainis alles hiljem
     public GridPane looGrid(Label tekstA1, ComboBox tunnidA, ComboBox minutidA, Label tekst1, Label tyhiLabel, Label tekstA2, ComboBox tunnidB, ComboBox minutidB, Label tekst2, Label tyhiLabel2, Label tekstA3, Label tekst3 ) {
   
-    	
     	//uus grid
     	GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10)); //padding ‰‰rtest < ^ v Insets
@@ -57,6 +57,7 @@ public class Main extends Application {
         return grid;
     }
     
+
     
   
     public String lisaAeg(String aeg, int tsyklid, boolean liida) { //liidab/lahutab stringis antud HH:mm ajast ette antud arvu ts¸kleid (int tsyklid)
@@ -126,8 +127,14 @@ public class Main extends Application {
         }
         
         
+        
+        
+        
+       
+        
         //tekitab eelnevalt defineeritud gridi
         GridPane grid = looGrid(tekstA1, tunnidA, minutidA, tekst1, tyhiLabel, tekstA2, tunnidB, minutidB, tekst2, tyhiLabel2, tekstA3, tekst3);
+        
         
         //tunnid ja minutid A default v‰‰rtused (23:00)
         tunnidA.getSelectionModel().select(23);
@@ -145,11 +152,36 @@ public class Main extends Application {
         minutidA.setOnAction(e -> tekst1.setText("ƒrka ¸les kell " + lisaAeg((String) tunnidA.getValue() + ":" + (String)minutidA.getValue(),5,true)));
         tunnidB.setOnAction(e -> tekst2.setText ("Mine magama kell " + lisaAeg((String) tunnidB.getValue() + ":" + (String)minutidB.getValue(),5,false)));
         minutidB.setOnAction(e -> tekst2.setText("Mine magama kell " + lisaAeg((String) tunnidB.getValue() + ":" + (String)minutidB.getValue(),5,false)));
- 
+        
+        
+        
+        
+        //loob BorderPane ja paigutab sinna HBoxi sisse, unep‰eviku lingi jaoks
+        BorderPane border = new BorderPane();
+        
+        //uus hbox - ¸les, unep‰eviku avamiseks
+        HBox hbox = new HBox(10);
+        hbox.setAlignment(Pos.BASELINE_CENTER);
+        Button k‰ivita = new Button("Unep‰evik");
+        hbox.setPadding(new Insets(10, 10, 10, 10));
+        
+        //trycatch lambda fn
+        k‰ivita.setOnAction( e->{
+			try {
+				Unep‰evikK‰ivitus.main(null);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		});
+        
+        hbox.getChildren().add(k‰ivita);
+        border.setCenter(grid);
+        border.setTop(hbox);
+
         
         
         //loob uue stseeni valmistatud grid layoutist
-        Scene scene = new Scene(grid, 480, 640);
+        Scene scene = new Scene(border, 480, 640);
         scene.getStylesheets().add("Styling.css"); //laeb css faili  
         scene.getStylesheets().add("https://fonts.googleapis.com/css?family=Roboto"); //vıtab googlest fondi
         window.setScene(scene); //loo stseen
