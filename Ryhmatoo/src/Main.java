@@ -78,7 +78,7 @@ public class Main extends Application {
         //trycatch lambda fn
         käivita.setOnAction( e->{
 			try {
-				UnepäevikKäivitus.main(null);
+				UnepäevikKäivitus.küsiAndmeid();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
