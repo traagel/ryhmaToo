@@ -50,7 +50,7 @@ public class UnepäevikKäivitus {
 		m.find();
 		int arkvelOlekuAeg = Integer.valueOf(m.group());
 
-		Unepaevik sissekanne = new Unepaevik(magamaMinek, arkamine, LocalDate.now(), aegMagamaJaamiseks, arkvelOlekuAeg);
+		Sissekanne sissekanne = new Sissekanne(magamaMinek, arkamine, LocalDate.now(), aegMagamaJaamiseks, arkvelOlekuAeg);
 		sissekanne.looSissekanne();
 		sissekanne.setPiisavUneAeg(6);
 		sissekanne.soovita();

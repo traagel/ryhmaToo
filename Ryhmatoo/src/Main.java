@@ -1,21 +1,29 @@
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.stage.Stage;
-import javafx.scene.*;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class Main extends Application {
 	Stage window;
 	int tsyklid = 5;
+	Scene peaStseen;
 
 	public void setTsyklid(int tsyklid) {
 		this.tsyklid = tsyklid;
@@ -67,18 +75,102 @@ public class Main extends Application {
 		Button käivita = new Button("Unepäevik");
 		hbox.setPadding(new Insets(10, 10, 10, 10));
 
+		// Unepäevik
+		BorderPane border = new BorderPane();
+		taidaPaevikuSisu(border);
 
-		//trycatch lambda fn
-		käivita.setOnAction( e->{
-			try {
-				UnepäevikKäivitus.algAndmed();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
+		Scene paevikuStseen = new Scene(border, 480, 640);
+
+		HBox hbox2 = new HBox(10);
+		hbox2.setAlignment(Pos.BASELINE_CENTER);
+		hbox2.setPadding(new Insets(10, 10, 5, 10));
+
+		Button uneMati = new Button("UneMati");
+		hbox2.getChildren().add(uneMati);
+
+		border.setTop(hbox2);
+
+		uneMati.setOnAction(i -> window.setScene(peaStseen));
+
+		paevikuStseen.getStylesheets().add("Styling.css"); //laeb css faili
+		paevikuStseen.getStylesheets().add("https://fonts.googleapis.com/css?family=Roboto"); //võtab googlest fondi
+
+		käivita.setOnAction(i -> {
+			window.setScene(paevikuStseen);
+			window.show();
 		});
 
 		hbox.getChildren().add(käivita);
 		return hbox;
+	}
+
+	private void taidaPaevikuSisu(BorderPane border) {
+		DatePicker kuupaevaValik = new DatePicker();
+		kuupaevaValik.setMinWidth(400);
+		kuupaevaValik.setPromptText("Sisesta kuupäev");
+
+		TextField magamaMinekuAeg = new TextField();
+		magamaMinekuAeg.setPromptText("Sisesta magama mineku aeg (HH:mm)");
+
+		TextField arkamisAeg = new TextField();
+		arkamisAeg.setPromptText("Sisesta ärkamise aeg (HH:mm)");
+
+		TextField kulusMagamaJaamiseks = new TextField();
+		kulusMagamaJaamiseks.setPromptText("Sisesta aeg, mis kulus magama minekuks");
+
+		TextField kauaOlinArkvel = new TextField();
+		kauaOlinArkvel.setPromptText("Sisesta aeg, kaua olid ärkvel");
+
+		Button looSissekanne = new Button("Loo sissekanne");
+		looSissekanne.setMinWidth(400);
+		looSissekanne.setOnMouseClicked(i -> {
+			LocalDate kuupaev = kuupaevaValik.getValue();
+			String magamaMinekuAegText = magamaMinekuAeg.getText();
+			String arkamisAegText = arkamisAeg.getText();
+			int kulusMagamaJaamiseksText = Integer.parseInt(kulusMagamaJaamiseks.getText());
+			int kauaOlinArkvelText = Integer.parseInt(kauaOlinArkvel.getText());
+
+			kuupaevaValik.setValue(null);
+			magamaMinekuAeg.clear();
+			arkamisAeg.clear();
+			kulusMagamaJaamiseks.clear();
+			kauaOlinArkvel.clear();
+
+
+			Sissekanne sissekanne = new Sissekanne(magamaMinekuAegText, arkamisAegText, kuupaev, kulusMagamaJaamiseksText,
+					kauaOlinArkvelText);
+			try {
+				sissekanne.looSissekanne();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			//sissekanne.setPiisavUneAeg(6);
+			//sissekanne.soovita();
+		});
+
+		Canvas canvas = new Canvas(200, 180);
+		GraphicsContext graafikaKontekst = canvas.getGraphicsContext2D();
+		Image image = new Image(getClass().getResourceAsStream("lambs.png"));
+		graafikaKontekst.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight());
+
+		Button looGraafik = new Button("Loo graafik");
+		looGraafik.setOnMouseClicked(i -> {
+			Unegraafik unegraafik = new Unegraafik();
+			try {
+				unegraafik.loeSissekanded();
+				unegraafik.looGraafik();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+		looGraafik.setMinWidth(400);
+
+		VBox vBox = new VBox(10);
+		vBox.setAlignment(Pos.CENTER);
+		vBox.getChildren().addAll(kuupaevaValik, magamaMinekuAeg, arkamisAeg, kulusMagamaJaamiseks, kauaOlinArkvel,
+				looSissekanne, canvas, looGraafik);
+		vBox.setMaxWidth(400);
+		border.setCenter(vBox);
 	}
 
 	public String lisaAeg(String aeg, int tsyklid, boolean liida) { //liidab/lahutab stringis antud HH:mm ajast ette antud arvu tsükleid (int tsyklid)
@@ -227,10 +319,10 @@ public class Main extends Application {
 		border.setBottom(hbox2);
 
 		//loob uue stseeni valmistatud grid layoutist
-		Scene scene = new Scene(border, 480, 640);
-		scene.getStylesheets().add("Styling.css"); //laeb css faili  
-		scene.getStylesheets().add("https://fonts.googleapis.com/css?family=Roboto"); //võtab googlest fondi
-		window.setScene(scene); //loo stseen
+		peaStseen = new Scene(border, 480, 640);
+		peaStseen.getStylesheets().add("Styling.css"); //laeb css faili
+		peaStseen.getStylesheets().add("https://fonts.googleapis.com/css?family=Roboto"); //võtab googlest fondi
+		window.setScene(peaStseen); //loo stseen
 		window.setResizable(false); //ei saa akna suurust muuta
 		window.show(); //näita akent  
 	}

@@ -7,7 +7,7 @@ import java.time.LocalTime;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 
-public class Unepaevik {
+public class Sissekanne {
     private String magamaMinekuAeg;
     private String arkamisaeg;
     private LocalDate kuupaev;
@@ -15,7 +15,7 @@ public class Unepaevik {
     private int arkvelOlekuAeg;
     private int piisavUneAeg;
 
-    public Unepaevik(String magamaMinekuAeg, String arkamisaeg, LocalDate kuupaev, int aegMagamaJaamiseks, int arkvelOlekuAeg) {
+    public Sissekanne(String magamaMinekuAeg, String arkamisaeg, LocalDate kuupaev, int aegMagamaJaamiseks, int arkvelOlekuAeg) {
         this.magamaMinekuAeg = magamaMinekuAeg;
         this.arkamisaeg = arkamisaeg;
         this.kuupaev = kuupaev;
@@ -47,7 +47,7 @@ public class Unepaevik {
         String[] arkamisaegList = arkamisaeg.split(":"); //listis eraldatakse arkamisaja tunnid ja minutid
         LocalTime arkamineKell = LocalTime.of(Integer.parseInt(arkamisaegList[0]), Integer.parseInt(arkamisaegList[1]));
         int magamisAeg = (int) magamaKell.until(arkamineKell, MINUTES); //leiab magamaminemisaja ja arkamisaja vahe
-        //Kui kasutaja √§rkab j√§rgmisel p√§eval, siis v√§ljastab until meetod negatiivse uneaja, kuna ta ei arvesta kuup√§eva muutusega
+        //Kui kasutaja ‰rkab j‰rgmisel p‰eval, siis v‰ljastab until meetod negatiivse uneaja, kuna ta ei arvesta kuup‰eva muutusega
         if (magamisAeg < 0) {
             return 1440 + magamisAeg; //liites negatiivsele uneajale 24h (1440 minutit) saame tegeliku uneaja
         } else {
@@ -62,7 +62,7 @@ public class Unepaevik {
     }
 
     public void soovita() {
-        //v√µrdleb uneaega kasutaja poolt m√§√§ratud piisava uneajaga ning annab vastava soovituse
+        //vırdleb uneaega kasutaja poolt m‰‰ratud piisava uneajaga ning annab vastava soovituse
         if (magamisAeg() > piisavUneAeg * 60) {
             JOptionPane.showMessageDialog(null, "Tubli! Magasid hasti.");
         } else {

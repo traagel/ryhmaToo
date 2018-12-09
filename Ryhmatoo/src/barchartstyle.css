@@ -1,0 +1,7 @@
+.default-color0.chart-bar {
+    -fx-bar-fill: #2a475e;
+}
+
+.default-color1.chart-bar {
+    -fx-bar-fill: red;
+}
