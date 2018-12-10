@@ -19,6 +19,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.swing.JOptionPane;
+
 
 public class Main extends Application {
 	Stage window;
@@ -124,26 +126,31 @@ public class Main extends Application {
 		Button looSissekanne = new Button("Loo sissekanne");
 		looSissekanne.setMinWidth(400);
 		looSissekanne.setOnMouseClicked(i -> {
-			LocalDate kuupaev = kuupaevaValik.getValue();
-			String magamaMinekuAegText = magamaMinekuAeg.getText();
-			String arkamisAegText = arkamisAeg.getText();
-			int kulusMagamaJaamiseksText = Integer.parseInt(kulusMagamaJaamiseks.getText());
-			int kauaOlinArkvelText = Integer.parseInt(kauaOlinArkvel.getText());
-
-			kuupaevaValik.setValue(null);
-			magamaMinekuAeg.clear();
-			arkamisAeg.clear();
-			kulusMagamaJaamiseks.clear();
-			kauaOlinArkvel.clear();
-
-
-			Sissekanne sissekanne = new Sissekanne(magamaMinekuAegText, arkamisAegText, kuupaev, kulusMagamaJaamiseksText,
-					kauaOlinArkvelText);
 			try {
-				sissekanne.looSissekanne();
-			} catch (IOException e) {
-				e.printStackTrace();
+				LocalDate kuupaev = kuupaevaValik.getValue();
+				String magamaMinekuAegText = magamaMinekuAeg.getText();
+				String arkamisAegText = arkamisAeg.getText();
+				int kulusMagamaJaamiseksText = Integer.parseInt(kulusMagamaJaamiseks.getText());
+				int kauaOlinArkvelText = Integer.parseInt(kauaOlinArkvel.getText());
+
+				kuupaevaValik.setValue(null);
+				magamaMinekuAeg.clear();
+				arkamisAeg.clear();
+				kulusMagamaJaamiseks.clear();
+				kauaOlinArkvel.clear();
+
+
+				Sissekanne sissekanne = new Sissekanne(magamaMinekuAegText, arkamisAegText, kuupaev, kulusMagamaJaamiseksText,
+						kauaOlinArkvelText);
+				try {
+					sissekanne.looSissekanne();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}catch(NumberFormatException e){
+				JOptionPane.showMessageDialog(null, "Vigane sisend", "NumberFormatException", JOptionPane.INFORMATION_MESSAGE);
 			}
+			
 			//sissekanne.setPiisavUneAeg(6);
 			//sissekanne.soovita();
 		});
@@ -163,6 +170,7 @@ public class Main extends Application {
 				e.printStackTrace();
 			}
 		});
+		
 		looGraafik.setMinWidth(400);
 
 		VBox vBox = new VBox(10);
