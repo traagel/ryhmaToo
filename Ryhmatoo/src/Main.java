@@ -156,7 +156,7 @@ public class Main extends Application {
         Image image = new Image(getClass().getResourceAsStream("lambs.png")); //loob pildi .png failist
         graafikaKontekst.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight()); //lisab pildi graafikakontekstile
 
-        Button looGraafik = new Button("Loo graafik"); //loob nupu "Loo graafik"
+        Button looGraafik = new Button("Nädala andmed"); //loob nupu "Loo graafik"
         looGraafik.setOnMouseClicked(i -> {
             Unegraafik unegraafik = new Unegraafik(); //loob Unegraafik isendi
             try {

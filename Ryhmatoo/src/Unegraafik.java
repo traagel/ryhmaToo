@@ -5,6 +5,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.io.File;
@@ -19,7 +20,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class Unegraafik extends Application {
-
+	private double unevılg = 0;
 	List<String> kuup‰evad = new ArrayList<>();
 	List<Double> magatudAjad = new ArrayList<>();
 
@@ -43,20 +44,20 @@ public class Unegraafik extends Application {
 	}
 
 	//loeb magatud aegade listist sisse sellel n‰dalal magatud ajad
-	public List<String> viimasedSeitse(boolean formaat) {
-		List<String> viimasedSeitse = new ArrayList<String>();
+	public List<String> kaheksaP‰eva(boolean formaat) {
+		List<String> kaheksaP‰eva = new ArrayList<String>();
 		LocalDate n‰dalap‰ev = LocalDate.now();
 		while (n‰dalap‰ev.getDayOfWeek() != DayOfWeek.MONDAY) {
 			n‰dalap‰ev = n‰dalap‰ev.minusDays(1);
 		}
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 8; i++) {
 			if(formaat) {
-				viimasedSeitse.add(n‰dalap‰ev.format(DateTimeFormatter.ofPattern("dd. MMMM", Locale.forLanguageTag("ET"))));
+				kaheksaP‰eva.add(n‰dalap‰ev.format(DateTimeFormatter.ofPattern("dd. MMMM", Locale.forLanguageTag("ET"))));
 			}else{
-				viimasedSeitse.add(String.valueOf(n‰dalap‰ev));}
+				kaheksaP‰eva.add(String.valueOf(n‰dalap‰ev));}
 			n‰dalap‰ev= n‰dalap‰ev.plusDays(1);
 		}
-		return viimasedSeitse;
+		return kaheksaP‰eva;
 	}
 
 	public void looGraafik() throws Exception { //loob graafiku k‰ivitades start meetodi
@@ -69,11 +70,12 @@ public class Unegraafik extends Application {
 		peaLava.setTitle("Unegraafik"); //pealkiri
 		sbc.setTitle("N‰dalas magatud tunnid"); //graafiku pealkiri
 		xTelg.setLabel("kuup‰evad"); //x-telje pealkiri
-		List<String> p‰evad = viimasedSeitse(false); //salvestab muutujasse viimased seitse kuup‰eva
-		xTelg.setCategories(FXCollections.observableArrayList(viimasedSeitse(true))); //loob x-telje kategooriad (kuup‰evad)
+		List<String> p‰evad = kaheksaP‰eva(false); //salvestab muutujasse viimased seitse kuup‰eva
+		xTelg.setCategories(FXCollections.observableArrayList(kaheksaP‰eva(true))); //loob x-telje kategooriad (kuup‰evad)
 		yTelg.setLabel("Tunnid"); //y-telje pealkiri
 		yTelg.setTickLabelFill(Color.BLUEVIOLET);
 		xTelg.setTickLabelFill(Color.BLUEVIOLET);
+		
 		magatudAeg.setName("Magatud aeg");
 		puuduj‰‰k.setName("Unevılg");
 
@@ -82,8 +84,10 @@ public class Unegraafik extends Application {
 			Double magamata = 0.0;
 			if(kuup‰evad.contains(elem)) { //lisab v‰‰rtuse, kui sellel p‰eval leidub andmeid
 				magatud = magatudAjad.get(kuup‰evad.indexOf(elem));
-				if(magatud < 8) // kui on unevılg
-					magamata = 8 - magatud;
+				unevılg+= 8 - magatud;
+				if(unevılg < 0)
+					unevılg = 0;
+				magamata = unevılg;
 			}
 			// lisab tulbale v‰‰rtuse
 			elem = LocalDate.parse(elem).format(DateTimeFormatter.ofPattern("dd. MMMM", Locale.forLanguageTag("ET")));
