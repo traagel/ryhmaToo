@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.converter.LocalDateStringConverter;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -132,7 +133,7 @@ public class Main extends Application {
 				String arkamisAegText = arkamisAeg.getText();
 				int kulusMagamaJaamiseksText = Integer.parseInt(kulusMagamaJaamiseks.getText());
 				int kauaOlinArkvelText = Integer.parseInt(kauaOlinArkvel.getText());
-
+		
 				kuupaevaValik.setValue(null);
 				magamaMinekuAeg.clear();
 				arkamisAeg.clear();
@@ -148,9 +149,8 @@ public class Main extends Application {
 					e.printStackTrace();
 				}
 			}catch(NumberFormatException e){
-				JOptionPane.showMessageDialog(null, "Vigane sisend", "NumberFormatException", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Vigane sisend", "An exception has occurred", JOptionPane.INFORMATION_MESSAGE);
 			}
-			
 			//sissekanne.setPiisavUneAeg(6);
 			//sissekanne.soovita();
 		});
