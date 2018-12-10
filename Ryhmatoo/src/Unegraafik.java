@@ -7,7 +7,6 @@ import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.DayOfWeek;
@@ -24,14 +23,11 @@ public class Unegraafik extends Application {
 	List<String> kuup‰evad = new ArrayList<>();
 	List<Double> magatudAjad = new ArrayList<>();
 
-	final CategoryAxis xTelg = new CategoryAxis();
-	final NumberAxis yTelg = new NumberAxis();
-
-
-	final StackedBarChart<String, Number> sbc = new StackedBarChart<String, Number>(xTelg, yTelg);
-
-	final XYChart.Series<String, Number> magatudAeg = new XYChart.Series<String, Number>();
-	final XYChart.Series<String, Number> puuduj‰‰k = new XYChart.Series<String, Number>();
+	final CategoryAxis xTelg = new CategoryAxis(); //x-telg
+	final NumberAxis yTelg = new NumberAxis(); //y-telg
+	final StackedBarChart<String, Number> sbc = new StackedBarChart<String, Number>(xTelg, yTelg); //loob tulp-diagrammi isendi
+	final XYChart.Series<String, Number> magatudAeg = new XYChart.Series<String, Number>(); //magatud aja seeria
+	final XYChart.Series<String, Number> puuduj‰‰k = new XYChart.Series<String, Number>(); //unedefitsiidi seeria
 
 	public void loeSissekanded() throws FileNotFoundException {
 		File fail = new File("unepaevik.txt");
@@ -44,9 +40,9 @@ public class Unegraafik extends Application {
 			magatudAjad.add(tunnid + (minutid / 0.6));
 		}
 		sc.close();
-
 	}
 
+	//loeb magatud aegade listist sisse sellel n‰dalal magatud ajad
 	public List<String> viimasedSeitse(boolean formaat) {
 		List<String> viimasedSeitse = new ArrayList<String>();
 		LocalDate n‰dalap‰ev = LocalDate.now();
@@ -63,48 +59,45 @@ public class Unegraafik extends Application {
 		return viimasedSeitse;
 	}
 
-	public void looGraafik() throws Exception {
+	public void looGraafik() throws Exception { //loob graafiku k‰ivitades start meetodi
 		Stage pealava = new Stage();
 		start(pealava);
 	}
 
-
 	@Override
-	public void start(Stage peaLava) throws Exception { //loob graafiku
-		peaLava.setTitle("Unegraafik");
-		sbc.setTitle("N‰dalas magatud tunnid");
-		xTelg.setLabel(LocalDate.now().get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear())+". n‰dal");
-		List<String> p‰evad = viimasedSeitse(false);
-		xTelg.setCategories(FXCollections.observableArrayList(viimasedSeitse(true)));
-		yTelg.setLabel("Tunnid");
+	public void start(Stage peaLava) throws Exception { //loob pealava
+		peaLava.setTitle("Unegraafik"); //pealkiri
+		sbc.setTitle("N‰dalas magatud tunnid"); //graafiku pealkiri
+		xTelg.setLabel("kuup‰evad"); //x-telje pealkiri
+		List<String> p‰evad = viimasedSeitse(false); //salvestab muutujasse viimased seitse kuup‰eva
+		xTelg.setCategories(FXCollections.observableArrayList(viimasedSeitse(true))); //loob x-telje kategooriad (kuup‰evad)
+		yTelg.setLabel("Tunnid"); //y-telje pealkiri
 		yTelg.setTickLabelFill(Color.BLUEVIOLET);
 		xTelg.setTickLabelFill(Color.BLUEVIOLET);
-
 		magatudAeg.setName("Magatud aeg");
 		puuduj‰‰k.setName("Unevılg");
 
-		for (String elem : p‰evad) {
+		for (String elem : p‰evad) { // lisab 7 n‰dalap‰eva 
 			Double magatud = 0.0; 
 			Double magamata = 0.0;
-			if(kuup‰evad.contains(elem)) {
+			if(kuup‰evad.contains(elem)) { //lisab v‰‰rtuse, kui sellel p‰eval leidub andmeid
 				magatud = magatudAjad.get(kuup‰evad.indexOf(elem));
-				if(magatud < 8) 
+				if(magatud < 8) // kui on unevılg
 					magamata = 8 - magatud;
 			}
-			// lisab 7 n‰dalap‰eva 
-			//lisab v‰‰rtuse, kui sellel p‰eval leidub andmeid
+			// lisab tulbale v‰‰rtuse
 			elem = LocalDate.parse(elem).format(DateTimeFormatter.ofPattern("dd. MMMM", Locale.forLanguageTag("ET")));
 			magatudAeg.getData().add(new XYChart.Data<String, Number>(elem, magatud));
 			puuduj‰‰k.getData().add(new XYChart.Data<String, Number>(elem, magamata));
 		}	
-
-		sbc.getData().addAll(magatudAeg, puuduj‰‰k);
-		Scene stseen = new Scene(sbc, 800, 600);
-		peaLava.setScene(stseen);
-		peaLava.getScene().getStylesheets().add("barchartstyle.css");
-		peaLava.show();
+		sbc.getData().addAll(magatudAeg, puuduj‰‰k); //lisab tulpdiagrammile seeriad
+		Scene stseen = new Scene(sbc, 800, 600); //loob stseeni ja lisab graafiku stseenile
+		peaLava.setScene(stseen); //lisab stseeni pealavale
+		peaLava.getScene().getStylesheets().add("barchartstyle.css"); //laeb css faili
+		peaLava.show(); //n‰itab pealava
 
 	}
+
 
 
 }
