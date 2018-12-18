@@ -230,12 +230,12 @@ public class Main extends Application {
         minutidB.setVisibleRowCount(m);
 
         //tunni dropdown menüü
-        for (int i = 0; i <= 60; i++) {
+        for (int i = 0; i < 60; i++) {
             if (i < 10) {
                 tunnidA.getItems().add("0" + Integer.toString(i));
                 minutidA.getItems().add("0" + Integer.toString(i));
             } else {
-                if (i <= 24)
+                if (i < 24)
                     tunnidA.getItems().add(Integer.toString(i));
                 minutidA.getItems().add(Integer.toString(i));
             }

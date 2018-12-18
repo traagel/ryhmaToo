@@ -36,28 +36,28 @@ public class Unegraafik extends Application {
 		while (sc.hasNextLine()) {
 			String[] tükid = sc.nextLine().split(" ");
 			kuupäevad.add(tükid[1]);
-			int tunnid = Integer.parseInt(tükid[9]);
-			int minutid = Integer.parseInt(tükid[11]);
-			magatudAjad.add(tunnid + (minutid / 0.6));
+			double tunnid = Integer.parseInt(tükid[9]);
+			double minutid = Integer.parseInt(tükid[11]);
+			magatudAjad.add(tunnid + (minutid / 60));
 		}
 		sc.close();
 	}
 
 	//loeb magatud aegade listist sisse sellel nädalal magatud ajad
-	public List<String> kaheksaPäeva(boolean formaat) {
-		List<String> kaheksaPäeva = new ArrayList<String>();
+	public List<String> seitsePäeva(boolean formaat) {
+		List<String> seitsePäeva = new ArrayList<String>();
 		LocalDate nädalapäev = LocalDate.now();
 		while (nädalapäev.getDayOfWeek() != DayOfWeek.MONDAY) {
 			nädalapäev = nädalapäev.minusDays(1);
 		}
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 7; i++) {
 			if(formaat) {
-				kaheksaPäeva.add(nädalapäev.format(DateTimeFormatter.ofPattern("dd. MMMM", Locale.forLanguageTag("ET"))));
+				seitsePäeva.add(nädalapäev.format(DateTimeFormatter.ofPattern("dd. MMMM", Locale.forLanguageTag("ET"))));
 			}else{
-				kaheksaPäeva.add(String.valueOf(nädalapäev));}
+				seitsePäeva.add(String.valueOf(nädalapäev));}
 			nädalapäev= nädalapäev.plusDays(1);
 		}
-		return kaheksaPäeva;
+		return seitsePäeva;
 	}
 
 	public void looGraafik() throws Exception { //loob graafiku käivitades start meetodi
@@ -70,19 +70,18 @@ public class Unegraafik extends Application {
 		peaLava.setTitle("Unegraafik"); //pealkiri
 		sbc.setTitle("Nädalas magatud tunnid"); //graafiku pealkiri
 		xTelg.setLabel("kuupäevad"); //x-telje pealkiri
-		List<String> päevad = kaheksaPäeva(false); //salvestab muutujasse viimased seitse kuupäeva
-		xTelg.setCategories(FXCollections.observableArrayList(kaheksaPäeva(true))); //loob x-telje kategooriad (kuupäevad)
+		List<String> päevad = seitsePäeva(false); //salvestab muutujasse viimased seitse kuupäeva
+		xTelg.setCategories(FXCollections.observableArrayList(seitsePäeva(true))); //loob x-telje kategooriad (kuupäevad)
 		yTelg.setLabel("Tunnid"); //y-telje pealkiri
 		yTelg.setTickLabelFill(Color.BLUEVIOLET);
 		xTelg.setTickLabelFill(Color.BLUEVIOLET);
 		
 		magatudAeg.setName("Magatud aeg");
 		puudujääk.setName("Unevõlg");
-
 		for (String elem : päevad) { // lisab 7 nädalapäeva 
 			Double magatud = 0.0; 
 			Double magamata = 0.0;
-			if(kuupäevad.contains(elem)) { //lisab väärtuse, kui sellel päeval leidub andmeid
+			if(kuupäevad.contains(elem)) { // kui meil on selle kuupäeva kohta olemas andmed, lisab graafikule
 				magatud = magatudAjad.get(kuupäevad.indexOf(elem));
 				unevõlg+= 8 - magatud;
 				if(unevõlg < 0)
